@@ -1,3 +1,4 @@
+import { ServicoPrestadoModule } from './servico-prestado/servico-prestado.module';
 import { ClientesService } from './clientes.service';
 import { ClientesModule } from './clientes/clientes.module';
 import { TemplateModule } from './template/template.module';
@@ -20,7 +21,8 @@ import { HttpClientModule } from "@angular/common/http";
     HttpClientModule,
     AppRoutingModule,
     TemplateModule,
-    ClientesModule    
+    ClientesModule,
+    ServicoPrestadoModule    
   ],
   providers: [
     ClientesService
