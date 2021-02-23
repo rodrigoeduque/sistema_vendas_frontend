@@ -8,9 +8,8 @@ import { __values } from 'tslib';
 @Component({
   selector: 'app-clientes-form',
   templateUrl: './clientes-form.component.html',
-  styleUrls: ['./clientes-form.component.css']
+  styleUrls: ['./clientes-form.component.css'],
 })
-
 export class ClientesFormComponent implements OnInit {
   cliente: Cliente;
   success: boolean = false;
@@ -26,45 +25,41 @@ export class ClientesFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let params : Observable<Params> = this.activatedRouter.params
-    params.subscribe( urlParams => {
-        this.id = urlParams['id'];
-        if(this.id){
-          this.service
-            .getClienteById(this.id)
-            .subscribe( 
-              response => this.cliente = response ,
-              errorResponse => this.cliente = new Cliente()
-            )
-        }
-    })
+    let params: Observable<Params> = this.activatedRouter.params;
+    params.subscribe((urlParams) => {
+      this.id = urlParams['id'];
+      if (this.id) {
+        this.service.getClienteById(this.id).subscribe(
+          (response) => (this.cliente = response),
+          (errorResponse) => (this.cliente = new Cliente())
+        );
+      }
+    });
   }
 
-  onSubmit(){
-    if(this.id){
+  onSubmit() {
+    if (this.id) {
+      this.service.atualizar(this.cliente).subscribe(
+        (response) => {
+          this.success = true;
+          this.cliente = response;
+        },
+        (errorResponse) => {
+          this.errors = ['Erro ao atualizar o cliente.'];
+        }
+      );
+    } else {
+      this.service.salvar(this.cliente).subscribe(
+        (response) => {
+          this.success = true;
 
-      this.service
-        .atualizar(this.cliente)
-        .subscribe(response => {
-            this.success = true;
-            this.cliente = response;
-            
-        }, errorResponse => {
-          this.errors = ['Erro ao atualizar o cliente.']
-          
-        })
-    } else{
-
-      this.service
-        .salvar(this.cliente)
-          .subscribe( response => {
-            this.success = true;
-            
-            this.cliente = response;
-          } , errorResponse => {
-            this.success = false;
-            this.errors = errorResponse.error.errors;
-          })
+          this.cliente = response;
+        },
+        (errorResponse) => {
+          this.success = false;
+          this.errors = errorResponse.error.errors;
+        }
+      );
     }
   }
 
